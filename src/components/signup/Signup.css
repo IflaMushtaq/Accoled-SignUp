@@ -1,0 +1,12 @@
+.signup{
+    background-image: linear-gradient(to right, #D0F256, #7BD47A, #07AA9E, #0D5CA6);
+    /* background-image: url("../../images/landscape.png");
+    background-size: cover;
+    background-repeat: no-repeat; */
+    height: 100vh;
+}
+/* @media screen and (max-width: 600px) {
+    .signup{
+        background-image: url("../../images/potrait.png");
+    }
+  } */
