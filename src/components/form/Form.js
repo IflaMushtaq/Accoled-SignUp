@@ -152,9 +152,13 @@ function Form() {
               ))}
             </select>
           </div>
-          <div className='field'>
-            <input required type="checkbox" className='checkbox' checked={checkboxState} onChange={handleCheckboxChange}/>
-            <span style={{fontSize:"0.8rem"}}>I agree to the <a className="terms" href='/'>Terms & Conditions </a>and <a className="terms" href="/">Privacy Policy</a></span>
+          <div className='field field-checkbox'>
+            <div>
+              <input required type="checkbox" className='checkbox' checked={checkboxState} onChange={handleCheckboxChange}/>
+            </div>
+            <div style={{fontSize:"0.8rem"}}>
+              I agree to the <a className="terms" href='/'>Terms & Conditions </a>and <a className="terms" href="/">Privacy Policy</a>
+            </div>
           </div>
           <br />
           <div className="field">
