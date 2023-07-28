@@ -5,35 +5,31 @@
     padding: 0.5rem;
     padding-left: 2rem;
     padding-right: 2rem;
-}
-  
+} 
 .logo {
 margin-right: auto;
 }
 .logo:hover{
     cursor: pointer;
 }
-
 .logo img{
 width: 70%;
 height: 70%;
 }
-
 .signup-right {
 margin-left: auto;
 color: white;
-font-size: 1.2rem;
+font-size: 0.9rem;
 }
 .signup-right:hover{
     cursor: pointer;
-    font-weight: bold;
     transition: 0.2s;
 }
 .signup-right::after {
     content: "";
     width: 0px;
     border-radius: 5px;
-    height: 3px;
+    height: 2px;
     background: #ffffff;
     display: block;
     margin: auto;
@@ -41,4 +37,4 @@ font-size: 1.2rem;
 }
 .signup-right:hover::after {
     width: 100%;
- }
+}
