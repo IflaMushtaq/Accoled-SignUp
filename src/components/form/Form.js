@@ -5,6 +5,8 @@ import Radium, { StyleRoot } from "radium";
 import { toast } from 'react-toastify';
 import { ToastContainer } from 'react-toastify';
 import countryList from 'react-select-country-list';
+import Input from '../atoms/input/input'
+import Select from '../atoms/select/select';
 import './Form.css';
 
 function Form() {
@@ -14,61 +16,76 @@ function Form() {
       animationName: Radium.keyframes(pulse, 'pulse'), 
     }
   };
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
-  const [phone, setPhone] = useState('');
+
   const maxPhoneNumberLength = 10;
-  const [phoneError, setPhoneError] = useState('');
-  const [country, setCountry] = useState(''); 
-  const [checkboxState, setCheckboxState] = useState(false); 
-
-  const handleEmailChange = (event) => {
-    setEmail(event.target.value);
-  };
-
-  const handlePasswordChange = (event) => {
-    setPassword(event.target.value);
-  };
-
-  const handleConfirmPasswordChange = (event) => {
-    setConfirmPassword(event.target.value);
-  };
-
-  const isPasswordMatched = password === confirmPassword;  
-
-  const handlePhoneChange = (event) => {
-    const inputPhone = event.target.value;
-    if (inputPhone.length <= maxPhoneNumberLength) {
-      setPhone(inputPhone);
-      setPhoneError(inputPhone.length < maxPhoneNumberLength ? 'Phone number should be exactly 10 digits.' : '');
-    } else {
-      setPhoneError('Phone number should not exceed 10 digits.');
-    }
-  };
-
   const options = useMemo(() => countryList().getData(), []);
-  const changeHandler = (selectedCountry) => {
-    setCountry(selectedCountry);
-  };
-  
-  const handleCheckboxChange = (event) => {
-    setCheckboxState(event.target.checked);
-  };
+
+  const [formData, setFormData] = useState({
+    email:"",
+    password:"",
+    confirmPassword:"",
+    phone:"",
+    phoneError:"",
+    country:"",
+    checkboxState:false,
+  })
+
+  const handleChange = (event) => {
+    console.log("Form Control Change: ", event)
+    const selector = event.target.name;
+    switch (selector) {
+
+      case "phone":
+      if (event.target.value.length === maxPhoneNumberLength) {
+        setFormData({
+          ...formData,
+          [event.target.name]: event.target.value,
+          phoneError: "",
+        });
+      } else {
+        setFormData({
+          ...formData,
+          [event.target.name]: event.target.value,
+          phoneError: "Phone number should be exactly 10 digits.",
+        });
+      }
+      break;
+
+      case "confirmPassword":
+        const isPasswordMatched = formData.password === event.target.value;
+        setFormData({
+          ...formData,
+          [event.target.name]:event.target.value,
+          isPasswordMatched:isPasswordMatched
+        });
+        break;
+      
+      case "checkbox":
+        setFormData({
+          ...formData,
+          checkboxState: event.target.checked,
+        });
+        break;
+    
+      default:
+        setFormData({ ...formData, [event.target.name]: event.target.value });
+    }
+  }
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    if (phone.length !== maxPhoneNumberLength) {
-      setPhoneError('Phone number should be exactly 10 digits.');
+    if (formData.phone.length !== maxPhoneNumberLength) {
       return;
     }
-    setEmail('');
-    setPassword('');
-    setConfirmPassword('');
-    setPhone('');
-    setPhoneError('');
-    setCountry('');
-    setCheckboxState(false);
+    setFormData({
+      email: "",
+      password: "",
+      confirmPassword: "",
+      phone: "",
+      phoneError: "",
+      country: "",
+      checkboxState: false,
+    });
     showToastMessage();
   };
 
@@ -82,87 +99,86 @@ function Form() {
   return (
     <StyleRoot>
       <div className='form-container' style={styles.pulse}>
-        <h2>Start your journey with us!</h2>
+        <h2>Create your account</h2>
         <form onSubmit={handleSubmit}>
           <div className="field">
-            <input
+            <Input 
               type="email"
               id="email"
               name="email"
               placeholder="Email"
-              value={email}
-              onChange={handleEmailChange}
-              required
-              autoComplete="off" 
+              value={formData.email}
+              onChange={handleChange}  
             />
           </div>
           <div className="field">
-            <input
+            <Input 
               type="password"
               id="password"
               name="password"
               placeholder="Password"
-              value={password}
-              onChange={handlePasswordChange}
-              required
+              value={formData.password}
+              onChange={handleChange}  
             />
           </div>
           <div className="field">
-            <input
+            <Input 
               type="password"
               id="confirmPassword"
               name="confirmPassword"
               placeholder="Confirm Password"
-              value={confirmPassword}
-              onChange={handleConfirmPasswordChange}
-              required
-              pattern={password}
+              value={formData.confirmPassword}
+              onChange={handleChange}  
             />
-            {!isPasswordMatched && <span style={{ color: 'red', fontSize:"0.8rem" }}>* Passwords do not match</span>}
+            {formData.confirmPassword && !formData.isPasswordMatched && (
+              <span style={{ color: 'red', fontSize: '0.8rem' }}>
+                * Passwords do not match
+              </span>
+            )}
           </div>
           <div className="field">
-            <input
+            <Input 
               type="number"
               id="phone"
               name="phone"
               placeholder="Phone no."
-              value={phone}
-              onChange={handlePhoneChange}
-              required
+              value={formData.phone}
+              onChange={handleChange}  
             />
-            {phoneError && (
-              <span style={{ color: 'red', fontSize: '0.8rem' }}>{phoneError}</span>
+            {formData.phoneError && (
+              <span style={{ color: 'red', fontSize: '0.8rem' }}>{formData.phoneError}</span>
             )}
           </div>
           <div className="field">
-            <select
+            <Select
               id="country"
               name="country"
-              value={country}
-              onChange={(e) => changeHandler(e.target.value)}
-              required
-            >
-              <option value="">
-                Select Country
-              </option>
-              {options.map((option) => (
-                <option key={option.value} value={option.value}>
-                  {option.label}
-                </option>
-              ))}
-            </select>
+              value={formData.country}
+              onChange={handleChange}
+              options={options}
+            />
           </div>
           <div className='field field-checkbox'>
             <div>
-              <input required type="checkbox" className='checkbox' checked={checkboxState} onChange={handleCheckboxChange}/>
+            <Input
+              type="checkbox"
+              id="checkbox"
+              name="checkbox"
+              className="checkbox"
+              checked={formData.checkboxState}
+              onChange={handleChange}
+            />
             </div>
             <div style={{fontSize:"0.8rem"}}>
               I agree to the <a className="terms" href='/'>Terms & Conditions </a>and <a className="terms" href="/">Privacy Policy</a>
             </div>
-          </div>
+          </div> 
           <br />
           <div className="field">
-            <input type="submit" value="Submit" />
+            <Input
+              type="submit"
+              value="Submit"
+            />
           </div>
         </form>
         <ToastContainer />

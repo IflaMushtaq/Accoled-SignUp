@@ -25,16 +25,3 @@ font-size: 0.9rem;
     cursor: pointer;
     transition: 0.2s;
 }
-.signup-right::after {
-    content: "";
-    width: 0px;
-    border-radius: 5px;
-    height: 2px;
-    background: #ffffff;
-    display: block;
-    margin: auto;
-    transition: 0.4s;
-}
-.signup-right:hover::after {
-    width: 100%;
-}

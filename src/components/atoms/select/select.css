@@ -1,0 +1,10 @@
+select {
+  box-sizing: border-box;
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ccc;
+  height: 3rem; 
+  background-color: transparent;
+  border:none;
+  border-bottom: 1px solid white;
+}
