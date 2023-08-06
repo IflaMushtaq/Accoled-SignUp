@@ -31,7 +31,6 @@ function Form() {
   })
 
   const handleChange = (event) => {
-    console.log("Form Control Change: ", event)
     const selector = event.target.name;
     switch (selector) {
 
@@ -74,7 +73,7 @@ function Form() {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    if (formData.phone.length !== maxPhoneNumberLength) {
+    if ((formData.phone.length !== maxPhoneNumberLength) || (formData.password!=formData.confirmPassword)) {
       return;
     }
     setFormData({
